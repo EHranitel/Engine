@@ -1,54 +1,54 @@
+#ifndef GameObject_HPP
+#define GameObject_HPP
+
 #include <map>
 #include <iostream>
+#include "Managers.hpp"
 
-class Component 
-{
-    private:
-
-    public:
-    
-};
- 
-class Collider : public Component 
-{
-    private:
-
-    public:
-        
-};
- 
-class Renderer : public Component 
-{
-    private:
-
-    public:
-    
-};
- 
 class GameObject 
 {
     private:
         std::map<std::string, Component*> components;
-
+        
     public:
+        //int x;
+        //int y;
+        ManagerController controller;
 
         template <class T>
-        T* GetComponent(std::string key)
+        T* getComponent(T component)
         {
-            T* component = static_cast<T*> (components[key]);
+            T* newComponent = static_cast<T*> (components[typeid(T).name()]);
     
-            return component;
+            return newComponent;
         };
 
         template <typename T>
-        void AddComponent(T component, std::string key)
+        void addComponent(T component)
         {
-            components[key] = &component;
+            T* newComponent = new T;
+            //newComponent->gameObject = this;
+
+            if(typeid(T).name() == typeid(Renderer).name())
+            {
+                controller.renderManager.addRenderer(newComponent);
+            }
+
+            components[typeid(T).name()] = newComponent;
         }
     
-        void RemoveComponent(std::string key)
-        {
+        void removeComponent(std::string key)
+        { 
+            if(key == typeid(Renderer).name())
+            {
+                Renderer* component = static_cast<Renderer*> (components[key]);
+
+                controller.renderManager.removeRenderer(component);
+            }
+
+            delete components[key];
             components.erase(key);
         }
 };
  
+#endif

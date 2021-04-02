@@ -1,3 +1,6 @@
+#ifndef Storage_HPP
+#define Storage_HPP
+
 #include "GameObject.hpp"
 
 class Storage
@@ -7,22 +10,23 @@ class Storage
  
     public:
 
-        template <class T>
-        T* GetObject(std::string key)
-        {
-            T* gameObject = static_cast<T*> (gameObjects[key]);
-    
-            return gameObject;
+        GameObject* getObject(std::string key)
+        {  
+            return gameObjects[key];
         };
 
-        template <typename T>
-        void AddComponent(T component, std::string key)
+        void addObject(GameObject gameObject, std::string key)
         {
-            gameObjects[key] = &component;
+            //GameObject* newObject = new GameObject;
+
+            gameObjects[key] = &gameObject;
         }
     
-        void RemoveComponent(std::string key)
+        void removeObject(std::string key)
         {
+            delete gameObjects[key];
             gameObjects.erase(key);
         }
 };
+
+#endif
