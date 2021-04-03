@@ -6,20 +6,21 @@
 class Storage
 {
     private:
-        std::map<std::string, GameObject*> gameObjects;
+        
  
     public:
+        std::map<std::string, GameObject*> gameObjects;
 
         GameObject* getObject(std::string key)
         {  
             return gameObjects[key];
         };
 
-        void addObject(GameObject gameObject, std::string key)
+        void addObject(std::string key)
         {
-            //GameObject* newObject = new GameObject;
+            GameObject* newObject = new GameObject;
 
-            gameObjects[key] = &gameObject;
+            gameObjects[key] = newObject;
         }
     
         void removeObject(std::string key)

@@ -8,9 +8,11 @@
 class Renderer : public Component
 {
     private:
-        sf::Sprite sprite;
-        sf::Image image;
-        sf::Texture texture;
+        std::list<sf::Sprite*> sprites;
+        std::list<sf::Sprite*>::iterator currentSprite;
+
+        int tickTime = 50;
+        int time = 0;
 
     public:
         int x;
@@ -18,30 +20,70 @@ class Renderer : public Component
 
         void setPosition(int x, int y)
         {
-            sprite.setPosition(x, y);
+            this->x = x;
+            this->y = y;
         }
 
-        void updateSprite(std::string imageName)
+        void addSprite(std::string imageName)
         {
-            image.loadFromFile(imageName);
+            sf::Image* image = new sf::Image;
+            image->loadFromFile(imageName);
+
+            sf::Texture* texture = new sf::Texture;
+            texture->loadFromImage(*image);
+
+            sf::Sprite* sprite = new sf::Sprite;
+            sprite->setPosition(x, y);
         
-            texture.loadFromImage(image);
-        
-            sprite.setTexture(texture);
+            sprite->setTexture(*texture);
+
+            sprites.push_front(sprite);
+
+            currentSprite = sprites.begin();
         }
 
         void update(sf::RenderWindow* window)
         {
-            window->draw(sprite);
+            time++;
+            
+            if(time == 50)
+            {
+                time = 0;
+
+                std::list<sf::Sprite*>::iterator endSprite;
+                endSprite = sprites.end();
+                endSprite--;
+
+                if(currentSprite == endSprite)
+                {
+                    currentSprite = sprites.begin();
+                }
+
+                else
+                {
+                    currentSprite++;
+                }
+            }
+            
+            window->draw(**currentSprite);
+        }
+
+        ~Renderer()
+        {
+            for (auto it = sprites.begin(); it != sprites.end(); ++it) 
+            {
+                delete *it;
+            }
         }
 };
 
 class RenderManager
 {
     private:
-        std::list<Renderer*> rendererStorage;
+        
 
     public:
+        std::list<Renderer*> rendererStorage;
         sf::RenderWindow* window;
 
         void update()

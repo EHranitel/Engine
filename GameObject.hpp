@@ -11,9 +11,11 @@ class GameObject
         std::map<std::string, Component*> components;
         
     public:
+        std::string name;
+        ManagerController* controller;
         //int x;
         //int y;
-        ManagerController controller;
+        
 
         template <class T>
         T* getComponent(T component)
@@ -27,11 +29,12 @@ class GameObject
         void addComponent(T component)
         {
             T* newComponent = new T;
+            newComponent->gameObjectName = name;
             //newComponent->gameObject = this;
 
             if(typeid(T).name() == typeid(Renderer).name())
             {
-                controller.renderManager.addRenderer(newComponent);
+                controller->renderManager.addRenderer(newComponent);
             }
 
             components[typeid(T).name()] = newComponent;
@@ -43,11 +46,22 @@ class GameObject
             {
                 Renderer* component = static_cast<Renderer*> (components[key]);
 
-                controller.renderManager.removeRenderer(component);
+                controller->renderManager.removeRenderer(component);
             }
 
             delete components[key];
             components.erase(key);
+        }
+
+        ~GameObject()
+        {
+            for (int i = 0; i < components.size(); i++) 
+            {
+                if (components.count(typeid(Renderer).name()))
+                {
+                    removeComponent(typeid(Renderer).name());
+                }
+            }
         }
 };
  
