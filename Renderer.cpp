@@ -34,16 +34,15 @@ void Renderer::changeImage(std::string imageName)
     );
 
     sprite->sprite.setOrigin(center); 
-
-    sprite->texture.loadFromImage(sprite->image);
     sprite->sprite.setPosition(parent->x, parent->y);
 
+    sprite->texture.loadFromImage(sprite->image);
     sprite->sprite.setTexture(sprite->texture);
 }
 
 void Renderer::changeSprite(Sprite* sprite)
 {
-    if (!isAnimated)
+    if (!needAnimationRightNow)
     {
         delete this->sprite;
     }

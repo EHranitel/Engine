@@ -6,35 +6,14 @@
 class Storage
 {
     private:
-        
- 
-    public:
         std::map<std::string, GameObject*> gameObjects;
+        
+    public:
+        GameObject* getObject(std::string key);
 
-        GameObject* getObject(std::string key)
-        {  
-            return gameObjects[key];
-        };
-
-        void addObject(std::string key)
-        {
-            GameObject* newObject = new GameObject;
-
-            gameObjects[key] = newObject;
-        }
+        void addObject(std::string key);
     
-        void removeObject(std::string key)
-        {
-            if (!gameObjects.count(key))
-            {
-                std::cout << "NOT FOUND" << std::endl;
-
-                return;
-            }
-
-            delete gameObjects[key];
-            gameObjects.erase(key);
-        }
+        void removeObject(std::string key);
 };
 
 #endif

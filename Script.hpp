@@ -10,8 +10,6 @@ class Script : public Component
 
     public:
         virtual void run(){};
-
-        virtual ~Script(){};
 };
 
 class ScriptManager

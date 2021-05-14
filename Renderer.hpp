@@ -12,6 +12,8 @@ class Sprite
         sf::Image image;
         sf::Texture texture;
         sf::Sprite sprite;
+
+        float frameTime = 1000;
 };
 
 class Renderer : public Component
@@ -20,7 +22,7 @@ class Renderer : public Component
 
     public:
 
-        bool isAnimated = false;
+        bool needAnimationRightNow = false;
 
         Sprite* sprite;
 

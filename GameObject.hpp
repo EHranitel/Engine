@@ -32,6 +32,13 @@ class GameObject
 template <typename T>
 T* GameObject::getComponent()
 {
+    if (!components.count(typeid(T).name()))
+    {
+        std::cout << "COMPONENT NOT FOUND" << std::endl;
+
+        return nullptr;
+    }
+
     T* newComponent = static_cast<T*> (components[typeid(T).name()]);
 
     return newComponent;
@@ -51,15 +58,11 @@ void GameObject::addComponent()
 
     if(typeid(T).name() == typeid(Animation).name())
     {
-        std::cout << "2" << std::endl;
-
         controller->animationManager.addAnimation(this);
     }
 
     if(std::is_base_of<Script, T>::value)
     {
-        std::cout << "3" << std::endl;
-
         controller->scriptManager.addScript(newComponent);
     }
     
@@ -71,18 +74,22 @@ void GameObject::removeComponent()
 { 
     if (!components.count(typeid(T).name()))
     {
-        std::cout << "NOT FOUND" << std::endl;
+        std::cout << "COMPONENT NOT FOUND" << std::endl;
 
         return;
     }
 
     if (typeid(T).name() == typeid(Renderer).name())
     {
+        delete components[typeid(T).name()];
+
         controller->renderManager.removeRenderer(this);
     }
 
     if (typeid(T).name() == typeid(Animation).name())
     {
+        delete components[typeid(T).name()];
+
         controller->animationManager.removeAnimation(this);
     }
 
@@ -91,7 +98,6 @@ void GameObject::removeComponent()
         controller->scriptManager.removeScript(components[typeid(T).name()]);
     }
 
-    delete components[typeid(T).name()];
     components.erase(typeid(T).name());
 }
 

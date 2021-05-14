@@ -8,7 +8,7 @@ class Test : public Script
         {
             if (parent->x < 1000)
             {
-                std::cout << "SCRIPT" << std::endl;
+                //std::cout << "SCRIPT" << std::endl;
 
                 parent->x += 5;
             }
@@ -59,18 +59,18 @@ int main()
 
         if(time % 101 == 100)
         {
-            /*GameObject* obj1 = storage.getObject(std::to_string(0)); 
+            GameObject* obj1 = storage.getObject(std::to_string(0)); 
             std::cout << "1234" << std::endl;
             Renderer* rend1 = obj1->getComponent<Renderer>();
             std::cout << "12345" << std::endl;
             rend1->flipHorizontally();
             std::cout << "123456" << std::endl;
 
-            GameObject* obj2 = storage.getObject(std::to_string(1)); 
+            /*GameObject* obj2 = storage.getObject(std::to_string(1)); 
             std::cout << "1234" << std::endl;
             Renderer* rend2 = obj2->getComponent<Renderer>();
             std::cout << "12345" << std::endl;
-            //rend2->flipVertically();
+            //rend2->flipVertically();/*
             
             std::cout << "123456" << std::endl;*/
 
@@ -98,16 +98,16 @@ int main()
             deleteThis++;*/
         }
 
-        if (time == 500)
+        if (time % 200 == 150)
         {
             GameObject* obj = storage.getObject(std::to_string(0)); 
 
-            /*obj->removeComponent<Renderer>();
+            obj->removeComponent<Renderer>();
             std::cout << "1" << std::endl;
             obj->removeComponent<Animation>();
             std::cout << "12" << std::endl;
-            //obj->removeComponent<Test>();
-            std::cout << "123" << std::endl;*/
+            obj->removeComponent<Test>();
+            std::cout << "123" << std::endl;
         }
 
 		sf::Event event;
