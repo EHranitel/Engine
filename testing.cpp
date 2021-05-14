@@ -1,8 +1,19 @@
 #include "Storage.hpp"
-#include <iostream>
 #include <array>
-#include <list>
-#include <string>
+
+class Test : public Script
+{
+    public:
+        void run()
+        {
+            if (parent->x < 1000)
+            {
+                std::cout << "SCRIPT" << std::endl;
+
+                parent->x += 5;
+            }
+        }
+};
 
 int main()
 {
@@ -17,32 +28,53 @@ int main()
     sf::RenderWindow window(sf::VideoMode(1000, 800), "SFML window");
     controller.renderManager.window = &window;
 
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < 1; i++)
     {
         storage.addObject(std::to_string(i));
 
         GameObject* obj = storage.getObject(std::to_string(i)); 
         obj->controller = &controller;
 
-        obj->addComponent(rend0);
+        obj->addComponent<Renderer>();
+        obj->addComponent<Animation>();
+        obj->addComponent<Test>();
 
-        Renderer* rend = obj->getComponent(rend0);
+        Renderer* rend = obj->getComponent<Renderer>();
 
-        rend->setPosition(20 + rand()%(980-20+1), 20 + rand()%(780-20+1));
+        obj->x = 50;
+        //0 + rand()%(980-20+1);
+        obj->y = 50;
+        //20 + rand()%(780-20+1);
 
-        rend->addSprite("images/Eye1.png");
-        rend->addSprite("images/Eye2.png");
-        rend->addSprite("images/Eye3.png");
-        rend->addSprite("images/Eye4.png");
+        std::cout << "ASD" << std::endl;
+
+        rend->changeImage("images/Eye1.png");
+
+        std::cout << "ZXC" << std::endl;
     }
 
     while (window.isOpen())	
 	{
         time++;
 
-        if(time == 100)
+        if(time % 101 == 100)
         {
-            if(deleteThis == 10)
+            /*GameObject* obj1 = storage.getObject(std::to_string(0)); 
+            std::cout << "1234" << std::endl;
+            Renderer* rend1 = obj1->getComponent<Renderer>();
+            std::cout << "12345" << std::endl;
+            rend1->flipHorizontally();
+            std::cout << "123456" << std::endl;
+
+            GameObject* obj2 = storage.getObject(std::to_string(1)); 
+            std::cout << "1234" << std::endl;
+            Renderer* rend2 = obj2->getComponent<Renderer>();
+            std::cout << "12345" << std::endl;
+            //rend2->flipVertically();
+            
+            std::cout << "123456" << std::endl;*/
+
+            /*if(deleteThis == 1)
             {
                 deleteThis = 0;
             }
@@ -54,19 +86,28 @@ int main()
             GameObject* obj = storage.getObject(std::to_string(deleteThis)); 
             obj->controller = &controller;
 
-            obj->addComponent(rend0);
+            obj->addComponent<Renderer>();
 
-            Renderer* rend = obj->getComponent(rend0);
+            Renderer* rend = obj->getComponent<Renderer>();
 
             rend->setPosition(20 + rand()%(980-20+1), 20 + rand()%(780-20+1));
 
-            rend->addSprite("images/Eye1.png");
-            rend->addSprite("images/Eye2.png");
-            rend->addSprite("images/Eye3.png");
-            rend->addSprite("images/Eye4.png");
+            rend->addImage("images/Eye1.png");
 
             time = 0;
-            deleteThis++;
+            deleteThis++;*/
+        }
+
+        if (time == 500)
+        {
+            GameObject* obj = storage.getObject(std::to_string(0)); 
+
+            /*obj->removeComponent<Renderer>();
+            std::cout << "1" << std::endl;
+            obj->removeComponent<Animation>();
+            std::cout << "12" << std::endl;
+            //obj->removeComponent<Test>();
+            std::cout << "123" << std::endl;*/
         }
 
 		sf::Event event;
@@ -76,7 +117,7 @@ int main()
 				window.close();
 		}
  
-		controller.renderManager.update();
+		controller.update();
 	}
 
     //std::cout << std::to_string(1) << std::endl;

@@ -2,14 +2,29 @@
 #define Script_HPP
 
 #include "Component.hpp"
+#include <list>
 
 class Script : public Component
 {
     private:
 
     public:
-        
-    
+        virtual void run(){};
+
+        virtual ~Script(){};
+};
+
+class ScriptManager
+{
+    private:
+        std::list<Component*> scriptStorage;
+
+    public:
+        void update();
+
+        void addScript(Component* script);
+
+        void removeScript(Component* script);
 };
 
 #endif

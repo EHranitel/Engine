@@ -25,6 +25,13 @@ class Storage
     
         void removeObject(std::string key)
         {
+            if (!gameObjects.count(key))
+            {
+                std::cout << "NOT FOUND" << std::endl;
+
+                return;
+            }
+
             delete gameObjects[key];
             gameObjects.erase(key);
         }

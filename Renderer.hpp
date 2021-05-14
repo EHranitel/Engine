@@ -4,109 +4,54 @@
 #include <list>
 #include "Component.hpp"
 #include <SFML/Graphics.hpp>
+#include <iostream>
+
+class Sprite
+{
+    public:
+        sf::Image image;
+        sf::Texture texture;
+        sf::Sprite sprite;
+};
 
 class Renderer : public Component
 {
     private:
-        std::list<sf::Sprite*> sprites;
-        std::list<sf::Sprite*>::iterator currentSprite;
-
-        int tickTime = 50;
-        int time = 0;
 
     public:
-        int x;
-        int y;
 
-        void setPosition(int x, int y)
-        {
-            this->x = x;
-            this->y = y;
-        }
+        bool isAnimated = false;
 
-        void addSprite(std::string imageName)
-        {
-            sf::Image* image = new sf::Image;
-            image->loadFromFile(imageName);
+        Sprite* sprite;
 
-            sf::Texture* texture = new sf::Texture;
-            texture->loadFromImage(*image);
+        Renderer();
 
-            sf::Sprite* sprite = new sf::Sprite;
-            sprite->setPosition(x, y);
+        void rotate(float degree);
+        void flipVertically();
+        void flipHorizontally();
+
+        void changeImage(std::string imageName);
+
+        void changeSprite(Sprite* sprite);
+
+        void update(sf::RenderWindow* window);
         
-            sprite->setTexture(*texture);
-
-            sprites.push_front(sprite);
-
-            currentSprite = sprites.begin();
-        }
-
-        void update(sf::RenderWindow* window)
-        {
-            time++;
-            
-            if(time == 50)
-            {
-                time = 0;
-
-                std::list<sf::Sprite*>::iterator endSprite;
-                endSprite = sprites.end();
-                endSprite--;
-
-                if(currentSprite == endSprite)
-                {
-                    currentSprite = sprites.begin();
-                }
-
-                else
-                {
-                    currentSprite++;
-                }
-            }
-            
-            window->draw(**currentSprite);
-        }
-
-        ~Renderer()
-        {
-            for (auto it = sprites.begin(); it != sprites.end(); ++it) 
-            {
-                delete *it;
-            }
-        }
+        ~Renderer();
 };
 
 class RenderManager
 {
     private:
-        
+        std::list<GameObject*> rendererStorage;
 
     public:
-        std::list<Renderer*> rendererStorage;
         sf::RenderWindow* window;
 
-        void update()
-        {
-            window->clear();
+        void update();
 
-            for (std::list<Renderer*>::iterator it = rendererStorage.begin(); it != rendererStorage.end(); ++ it)
-            {        
-                (*it)->update(window);
-            }
+        void addRenderer(GameObject* rendererParent);
 
-            window->display();
-        }
-
-        void addRenderer(Renderer* renderer)
-        {
-            rendererStorage.push_front(renderer);
-        }
-
-        void removeRenderer(Renderer* renderer)
-        {
-            rendererStorage.remove(renderer);
-        }
+        void removeRenderer(GameObject* rendererParent);
 };
 
 #endif

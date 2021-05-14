@@ -13,56 +13,86 @@ class GameObject
     public:
         std::string name;
         ManagerController* controller;
-        //int x;
-        //int y;
         
-
-        template <class T>
-        T* getComponent(T component)
-        {
-            T* newComponent = static_cast<T*> (components[typeid(T).name()]);
-    
-            return newComponent;
-        };
+        float x;
+        float y;
 
         template <typename T>
-        void addComponent(T component)
-        {
-            T* newComponent = new T;
-            newComponent->gameObjectName = name;
-            //newComponent->gameObject = this;
+        T* getComponent();    
 
-            if(typeid(T).name() == typeid(Renderer).name())
-            {
-                controller->renderManager.addRenderer(newComponent);
-            }
+        template <typename T>
+        void addComponent();
 
-            components[typeid(T).name()] = newComponent;
-        }
-    
-        void removeComponent(std::string key)
-        { 
-            if(key == typeid(Renderer).name())
-            {
-                Renderer* component = static_cast<Renderer*> (components[key]);
-
-                controller->renderManager.removeRenderer(component);
-            }
-
-            delete components[key];
-            components.erase(key);
-        }
-
-        ~GameObject()
-        {
-            for (int i = 0; i < components.size(); i++) 
-            {
-                if (components.count(typeid(Renderer).name()))
-                {
-                    removeComponent(typeid(Renderer).name());
-                }
-            }
-        }
+        template <typename T>
+        void removeComponent();
+        
+        ~GameObject();
 };
- 
+
+template <typename T>
+T* GameObject::getComponent()
+{
+    T* newComponent = static_cast<T*> (components[typeid(T).name()]);
+
+    return newComponent;
+}
+
+template <typename T>
+void GameObject::addComponent()
+{
+    T* newComponent = new T;
+    newComponent->gameObjectName = name;
+    newComponent->parent = this;
+
+    if(typeid(T).name() == typeid(Renderer).name())
+    {
+        controller->renderManager.addRenderer(this);
+    }
+
+    if(typeid(T).name() == typeid(Animation).name())
+    {
+        std::cout << "2" << std::endl;
+
+        controller->animationManager.addAnimation(this);
+    }
+
+    if(std::is_base_of<Script, T>::value)
+    {
+        std::cout << "3" << std::endl;
+
+        controller->scriptManager.addScript(newComponent);
+    }
+    
+    components[typeid(T).name()] = newComponent;
+}
+
+template <typename T>
+void GameObject::removeComponent()
+{ 
+    if (!components.count(typeid(T).name()))
+    {
+        std::cout << "NOT FOUND" << std::endl;
+
+        return;
+    }
+
+    if (typeid(T).name() == typeid(Renderer).name())
+    {
+        controller->renderManager.removeRenderer(this);
+    }
+
+    if (typeid(T).name() == typeid(Animation).name())
+    {
+        controller->animationManager.removeAnimation(this);
+    }
+
+    if(std::is_base_of<Script, T>::value)
+    {
+        controller->scriptManager.removeScript(components[typeid(T).name()]);
+    }
+
+    delete components[typeid(T).name()];
+    components.erase(typeid(T).name());
+}
+
 #endif

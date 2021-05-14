@@ -1,8 +1,9 @@
 #ifndef Managers_HPP
 #define Managers_HPP
 
-#include "Renderer.hpp"
+#include "Time.hpp"
 #include "Script.hpp"
+#include "Animation.hpp"
 
 class ManagerController
 {
@@ -10,11 +11,11 @@ class ManagerController
 
     public:
         RenderManager renderManager;
+        ScriptManager scriptManager;
+        AnimationManager animationManager;
+        TimeManager timeManager;
 
-        void update()
-        {
-            renderManager.update();
-        }
+        void update();
 };
 
 #endif

@@ -3,13 +3,15 @@
 
 #include <string>
 
+class GameObject;
+
 class Component 
 {
     private:
 
     public:
+        GameObject* parent;
         std::string gameObjectName;
-        //GameObject* gameObject;
 };
 
 #endif
