@@ -9,14 +9,16 @@
 class Animation : public Component
 {
     private:
-        std::map<std::string, std::list<Sprite*>> sprites;
-        std::list<Sprite*>::iterator currentSprite;
+        std::map<std::string, Sprite*> sprites;
+        Sprite* currentSprite;
+        std::string currentSpriteName;
+        
+    public:
         std::string currentSpritePack;
 
-    public:
-        void addSpriteFromImage(std::string spritePackName, std::string imageName, float frameTime);
+        void addSpriteFromImage(std::string imageName, float frameTime, int numberOfParts);
 
-        void changeRendererSprite();
+        void changeRendererSprite(std::string imageName);
 
         void update();
 };

@@ -1,7 +1,7 @@
 #include "Animation.hpp"
 #include "GameObject.hpp"
 
-void Animation::addSpriteFromImage(std::string spritePackName, std::string imageName, float frameTime)
+void Animation::addSpriteFromImage(std::string imageName, float frameTime, int numberOfParts)
 {
     Sprite* sprite = new Sprite;
 
@@ -14,39 +14,74 @@ void Animation::addSpriteFromImage(std::string spritePackName, std::string image
     );
 
     sprite->sprite.setOrigin(center); 
-    sprite->sprite.setPosition(parent->x, parent->y);
+    sprite->sprite.setPosition(parent->x, 
+    parent->y - sprite->image.getSize().y * (1 - 1 / numberOfParts) / 2);
+
+    std::cout << parent->y + sprite->image.getSize().y * (1 - 1 / numberOfParts) / 2 << std::endl;
 
     sprite->texture.loadFromImage(sprite->image);
     sprite->sprite.setTexture(sprite->texture);
 
     sprite->frameTime = frameTime;
 
-    sprites[spritePackName].push_front(sprite);
+    sprite->numberOfParts = numberOfParts;
+
+    sprite->size = sf::Vector2i(sprite->image.getSize().x, sprite->image.getSize().y / numberOfParts);
+    sprite->rectangle = sf::IntRect(sprite->position, sprite->size);
+
+    sprites[imageName] = sprite;
+
+    if (currentSprite == nullptr)
+    {
+        currentSprite = sprite;
+        currentSpriteName = imageName;
+    }
 }
 
-void Animation::changeRendererSprite()
+void Animation::changeRendererSprite(std::string imageName)
 {
-    if (currentSprite == sprites.end())
+    if (currentSpriteName != imageName)
     {
-        currentSprite = sprites.begin();
+        currentSprite = sprites[imageName];
+        currentSpriteName = imageName;
+
+        currentSprite->position = sf::Vector2i(0, 0);
     }
 
-    else
-    {
-        ++currentSprite;
-    }
-
-    parent->getComponent<Renderer>()->changeSprite(currentSprite->second);
+    parent->getComponent<Renderer>()->changeSprite(currentSprite);
 }
 
 void Animation::update()
 {
-    if (!parent->getComponent<Renderer>()->needAnimationRightNow)
+    if (!parent->getComponent<Renderer>()->isAnimated)
     {
         return;
     }
 
-    if (time)
+    if (parent->controller->timeManager.getTime() % currentSprite->frameTime == 0)
+    {
+
+        if (currentSprite->position.y >= currentSprite->image.getSize().y * (currentSprite->numberOfParts - 1) / currentSprite->numberOfParts)
+        {
+            currentSprite->position.y = 0;
+
+            currentSprite->sprite.setPosition(parent->x, 
+            parent->y - currentSprite->image.getSize().y / currentSprite->numberOfParts * (currentSprite->numberOfParts - 1) / 2);
+        }
+
+        else
+        {
+            currentSprite->position.y += currentSprite->image.getSize().y / currentSprite->numberOfParts;
+
+            currentSprite->sprite.setPosition(parent->x, 
+            parent->y - currentSprite->image.getSize().y / currentSprite->numberOfParts * ((currentSprite->numberOfParts - 1) / 2 - 1));
+
+            std::cout << parent->y - (currentSprite->image.getSize().y / currentSprite->numberOfParts) * ((currentSprite->numberOfParts - 1) / 2 - 1) << std::endl;
+        }
+
+        currentSprite->rectangle = sf::IntRect(currentSprite->position, currentSprite->size);
+        currentSprite->sprite.setTextureRect(currentSprite->rectangle);
+    }
 }
 
 void AnimationManager::update()

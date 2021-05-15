@@ -2,8 +2,8 @@
 
 void ManagerController::update()
 {
-    scriptManager.update();
     timeManager.update();
+    scriptManager.update();  
     animationManager.update();
     renderManager.update();
 }

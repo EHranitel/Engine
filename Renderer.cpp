@@ -42,7 +42,7 @@ void Renderer::changeImage(std::string imageName)
 
 void Renderer::changeSprite(Sprite* sprite)
 {
-    if (!needAnimationRightNow)
+    if (!isAnimated)
     {
         delete this->sprite;
     }
@@ -52,7 +52,10 @@ void Renderer::changeSprite(Sprite* sprite)
 
 void Renderer::update(sf::RenderWindow* window)
 {          
-    sprite->sprite.setPosition(sf::Vector2f(parent->x, parent->y));
+    if (!isAnimated)
+    {
+        sprite->sprite.setPosition(sf::Vector2f(parent->x, parent->y));
+    }
 
     window->draw(sprite->sprite);
 }

@@ -13,7 +13,13 @@ class Sprite
         sf::Texture texture;
         sf::Sprite sprite;
 
-        float frameTime = 1000;
+        sf::Vector2i position = sf::Vector2i(0, 0);
+        sf::Vector2i size;
+        sf::IntRect rectangle;
+
+        int numberOfParts = 1;
+
+        int frameTime = 1000;
 };
 
 class Renderer : public Component
@@ -22,7 +28,7 @@ class Renderer : public Component
 
     public:
 
-        bool needAnimationRightNow = false;
+        bool isAnimated = false;
 
         Sprite* sprite;
 

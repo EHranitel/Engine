@@ -37,20 +37,22 @@ int main()
 
         obj->addComponent<Renderer>();
         obj->addComponent<Animation>();
-        obj->addComponent<Test>();
+        //obj->addComponent<Test>();
 
-        Renderer* rend = obj->getComponent<Renderer>();
-
-        obj->x = 50;
+        obj->x = 500; 
         //0 + rand()%(980-20+1);
-        obj->y = 50;
+        obj->y = 400;
         //20 + rand()%(780-20+1);
 
-        std::cout << "ASD" << std::endl;
+        //std::cout << "ASD" << std::endl;
+        Renderer* rend = obj->getComponent<Renderer>();
+        rend->isAnimated = true;
 
-        rend->changeImage("images/Eye1.png");
+        Animation* anim = obj->getComponent<Animation>();
+        anim->addSpriteFromImage("images/Dog_Husky.png", 100, 28);
+        anim->changeRendererSprite("images/Dog_Husky.png");
 
-        std::cout << "ZXC" << std::endl;
+        //std::cout << "ZXC" << std::endl;
     }
 
     while (window.isOpen())	
@@ -59,12 +61,12 @@ int main()
 
         if(time % 101 == 100)
         {
-            GameObject* obj1 = storage.getObject(std::to_string(0)); 
+            /*GameObject* obj1 = storage.getObject(std::to_string(0)); 
             std::cout << "1234" << std::endl;
             Renderer* rend1 = obj1->getComponent<Renderer>();
             std::cout << "12345" << std::endl;
-            rend1->flipHorizontally();
-            std::cout << "123456" << std::endl;
+            //rend1->flipHorizontally();
+            std::cout << "123456" << std::endl;*/
 
             /*GameObject* obj2 = storage.getObject(std::to_string(1)); 
             std::cout << "1234" << std::endl;
@@ -102,12 +104,12 @@ int main()
         {
             GameObject* obj = storage.getObject(std::to_string(0)); 
 
-            obj->removeComponent<Renderer>();
+            /*obj->removeComponent<Renderer>();
             std::cout << "1" << std::endl;
             obj->removeComponent<Animation>();
             std::cout << "12" << std::endl;
             obj->removeComponent<Test>();
-            std::cout << "123" << std::endl;
+            std::cout << "123" << std::endl;*/
         }
 
 		sf::Event event;
