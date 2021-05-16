@@ -67,18 +67,15 @@ void Animation::update()
         if (currentSprite->position.y >= currentSprite->image.getSize().y * (currentSprite->numberOfParts - 1) / currentSprite->numberOfParts)
         {
             currentSprite->position.y = 0;
-
-            currentSprite->sprite.setPosition(parent->x, 
-            parent->y + currentSprite->image.getSize().y * (1 - 1 / currentSprite->numberOfParts) / 2);
         }
 
         else
         {
             currentSprite->position.y += currentSprite->image.getSize().y / currentSprite->numberOfParts;
-
-            currentSprite->sprite.setPosition(parent->x, 
-            parent->y + currentSprite->image.getSize().y * (1 - 1 / currentSprite->numberOfParts) / 2);
         }
+        
+        currentSprite->sprite.setPosition(parent->x, 
+        parent->y + currentSprite->image.getSize().y * (1 - 1 / currentSprite->numberOfParts) / 2);
 
         currentSprite->rectangle = sf::IntRect(currentSprite->position, currentSprite->size);
         currentSprite->sprite.setTextureRect(currentSprite->rectangle);
