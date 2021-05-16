@@ -23,6 +23,8 @@ class ScriptManager
         void addScript(Component* script);
 
         void removeScript(Component* script);
+
+        void removeAllScriptsFromOneGameObject(GameObject* object);
 };
 
 #endif

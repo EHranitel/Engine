@@ -3,7 +3,6 @@
 
 #include <map>
 #include <list>
-#include "Component.hpp"
 #include "Renderer.hpp"
 
 class Animation : public Component
@@ -21,6 +20,8 @@ class Animation : public Component
         void changeRendererSprite(std::string imageName);
 
         void update();
+
+        ~Animation();
 };
 
 class AnimationManager

@@ -3,7 +3,7 @@
 void ManagerController::update()
 {
     timeManager.update();
-    scriptManager.update();  
+    scriptManager.update();
     animationManager.update();
     renderManager.update();
 }

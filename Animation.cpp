@@ -15,9 +15,7 @@ void Animation::addSpriteFromImage(std::string imageName, float frameTime, int n
 
     sprite->sprite.setOrigin(center); 
     sprite->sprite.setPosition(parent->x, 
-    parent->y - sprite->image.getSize().y * (1 - 1 / numberOfParts) / 2);
-
-    std::cout << parent->y + sprite->image.getSize().y * (1 - 1 / numberOfParts) / 2 << std::endl;
+    parent->y + sprite->image.getSize().y * (1 - 1 / numberOfParts) / 2);
 
     sprite->texture.loadFromImage(sprite->image);
     sprite->sprite.setTexture(sprite->texture);
@@ -28,6 +26,8 @@ void Animation::addSpriteFromImage(std::string imageName, float frameTime, int n
 
     sprite->size = sf::Vector2i(sprite->image.getSize().x, sprite->image.getSize().y / numberOfParts);
     sprite->rectangle = sf::IntRect(sprite->position, sprite->size);
+
+    sprite->sprite.setTextureRect(sprite->rectangle);
 
     sprites[imageName] = sprite;
 
@@ -46,6 +46,9 @@ void Animation::changeRendererSprite(std::string imageName)
         currentSpriteName = imageName;
 
         currentSprite->position = sf::Vector2i(0, 0);
+        currentSprite->rectangle = sf::IntRect(currentSprite->position, currentSprite->size);
+
+        currentSprite->sprite.setTextureRect(currentSprite->rectangle);
     }
 
     parent->getComponent<Renderer>()->changeSprite(currentSprite);
@@ -53,7 +56,7 @@ void Animation::changeRendererSprite(std::string imageName)
 
 void Animation::update()
 {
-    if (!parent->getComponent<Renderer>()->isAnimated)
+    if (sprites.size() == 0 || !parent->getComponent<Renderer>()->isAnimated)
     {
         return;
     }
@@ -66,7 +69,7 @@ void Animation::update()
             currentSprite->position.y = 0;
 
             currentSprite->sprite.setPosition(parent->x, 
-            parent->y - currentSprite->image.getSize().y / currentSprite->numberOfParts * (currentSprite->numberOfParts - 1) / 2);
+            parent->y + currentSprite->image.getSize().y * (1 - 1 / currentSprite->numberOfParts) / 2);
         }
 
         else
@@ -74,13 +77,30 @@ void Animation::update()
             currentSprite->position.y += currentSprite->image.getSize().y / currentSprite->numberOfParts;
 
             currentSprite->sprite.setPosition(parent->x, 
-            parent->y - currentSprite->image.getSize().y / currentSprite->numberOfParts * ((currentSprite->numberOfParts - 1) / 2 - 1));
-
-            std::cout << parent->y - (currentSprite->image.getSize().y / currentSprite->numberOfParts) * ((currentSprite->numberOfParts - 1) / 2 - 1) << std::endl;
+            parent->y + currentSprite->image.getSize().y * (1 - 1 / currentSprite->numberOfParts) / 2);
         }
 
         currentSprite->rectangle = sf::IntRect(currentSprite->position, currentSprite->size);
         currentSprite->sprite.setTextureRect(currentSprite->rectangle);
+    }
+}
+
+Animation::~Animation()
+{
+    int len = sprites.size();
+
+    std::map<std::string, Sprite*>::iterator it = sprites.begin();
+
+    for (int i = 0; i < len; i++) 
+    {
+        if (parent->getComponent<Renderer>()->sprite == it->second)
+        {
+            continue;
+        }
+
+        delete it->second;
+
+        sprites.erase(it++);
     }
 }
 

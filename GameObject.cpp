@@ -2,11 +2,18 @@
 
 GameObject::~GameObject()
 {
-    /*for (auto it = components.begin(); it != components.end(); ++it) 
-    {
-        delete &it;
-        components.erase(it);
-    }
+    controller->animationManager.removeAnimation(this);
+    controller->renderManager.removeRenderer(this);
+    controller->scriptManager.removeAllScriptsFromOneGameObject(this);
 
-    std::cout << components.size() << std::endl;*/
+    int len = components.size();
+
+    std::map<std::string, Component*>::iterator it = components.begin();
+
+    for (int i = 0; i < len; i++) 
+    {
+        delete it->second;
+
+        components.erase(it++);
+    }
 }

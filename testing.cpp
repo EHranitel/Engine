@@ -50,7 +50,13 @@ int main()
 
         Animation* anim = obj->getComponent<Animation>();
         anim->addSpriteFromImage("images/Dog_Husky.png", 100, 28);
+        anim->addSpriteFromImage("images/Eye1.png", 100, 1);
+        anim->addSpriteFromImage("images/Eye2.png", 100, 1);
         anim->changeRendererSprite("images/Dog_Husky.png");
+
+        //rend->changeImage("images/Eye1.png");
+
+        //obj->removeComponent<Animation>();
 
         //std::cout << "ZXC" << std::endl;
     }
@@ -61,12 +67,10 @@ int main()
 
         if(time % 101 == 100)
         {
-            /*GameObject* obj1 = storage.getObject(std::to_string(0)); 
-            std::cout << "1234" << std::endl;
-            Renderer* rend1 = obj1->getComponent<Renderer>();
-            std::cout << "12345" << std::endl;
-            //rend1->flipHorizontally();
-            std::cout << "123456" << std::endl;*/
+            
+            GameObject* obj1 = storage.getObject(std::to_string(0)); 
+            obj1->x -= 5;
+
 
             /*GameObject* obj2 = storage.getObject(std::to_string(1)); 
             std::cout << "1234" << std::endl;
@@ -118,7 +122,7 @@ int main()
 			if (event.type == sf::Event::Closed)
 				window.close();
 		}
- 
+
 		controller.update();
 	}
 

@@ -20,6 +20,9 @@ class Sprite
         int numberOfParts = 1;
 
         int frameTime = 1000;
+
+        int start = 0;
+        int finish = numberOfParts;
 };
 
 class Renderer : public Component
