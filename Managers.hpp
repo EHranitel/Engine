@@ -4,6 +4,7 @@
 #include "Time.hpp"
 #include "Script.hpp"
 #include "Animation.hpp"
+#include "Physics.hpp"
 
 class ManagerController
 {
@@ -14,6 +15,7 @@ class ManagerController
         ScriptManager scriptManager;
         AnimationManager animationManager;
         TimeManager timeManager;
+        PhysicsManager physicsManager;
 
         void update();
 };

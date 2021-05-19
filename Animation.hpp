@@ -15,7 +15,9 @@ class Animation : public Component
     public:
         std::string currentSpritePack;
 
-        void addSpriteFromImage(std::string imageName, float frameTime, int numberOfParts);
+        void addSpriteFromImage(std::string imageName, float frameTime, int numberOfParts, int firstPart = 0, int lastPart = 0);
+
+        void removeSprite(std::string imageName);
 
         void changeRendererSprite(std::string imageName);
 

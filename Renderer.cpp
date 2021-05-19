@@ -4,8 +4,10 @@
 Renderer::Renderer()
 {
     Sprite* newSprite = new Sprite;
-
     sprite = newSprite; 
+
+    Text* newText = new Text;
+    text = newText;
 }
 
 void Renderer::rotate(float degeree)
@@ -23,6 +25,25 @@ void Renderer::flipHorizontally()
     sprite->sprite.scale(sf::Vector2f(-1, 1));
 }
 
+sf::Vector2i Renderer::getSize()
+{
+    return sprite->size;
+}
+
+void Renderer::changeFont(std::string fontName, sf::Color color)
+{
+    text->font.loadFromFile(fontName);
+    text->text.setFont(text->font);
+
+    text->text.setFillColor(color);
+}
+
+void Renderer::changeText(sf::String message, int characterSize)
+{
+    text->text.setString(message);
+    text->text.setCharacterSize(characterSize);
+}
+
 void Renderer::changeImage(std::string imageName)
 {
     sprite->image.loadFromFile(imageName);
@@ -32,6 +53,9 @@ void Renderer::changeImage(std::string imageName)
         sprite->image.getSize().x / 2, 
         sprite->image.getSize().y / 2
     );
+
+    sprite->size.x = sprite->image.getSize().x;
+    sprite->size.y = sprite->image.getSize().y;
 
     sprite->sprite.setOrigin(center); 
     sprite->sprite.setPosition(parent->x, parent->y);
@@ -58,11 +82,27 @@ void Renderer::update(sf::RenderWindow* window)
     }
 
     window->draw(sprite->sprite);
+
+    text->text.setPosition(sf::Vector2f(parent->x, parent->y));
+    window->draw(text->text);
 }
 
 Renderer::~Renderer()
 {
     delete sprite;
+    delete text;
+}
+
+RenderManager::RenderManager()
+{
+    sf::RenderWindow* newWindow = new sf::RenderWindow(sf::VideoMode(1000, 800), "SFML window");
+
+    window = newWindow;
+}
+
+void RenderManager::setWindowSize(int x, int y)
+{
+    window->setSize(sf::Vector2u(x, y));
 }
 
 void RenderManager::update()
@@ -85,4 +125,9 @@ void RenderManager::addRenderer(GameObject* rendererParent)
 void RenderManager::removeRenderer(GameObject* rendererParent)
 {
     rendererStorage.remove(rendererParent);
+}
+
+RenderManager::~RenderManager()
+{
+    delete window;
 }

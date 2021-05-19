@@ -1,7 +1,7 @@
 #include "Animation.hpp"
 #include "GameObject.hpp"
 
-void Animation::addSpriteFromImage(std::string imageName, float frameTime, int numberOfParts)
+void Animation::addSpriteFromImage(std::string imageName, float frameTime, int numberOfParts, int firstPart, int lastPart)
 {
     Sprite* sprite = new Sprite;
 
@@ -22,7 +22,19 @@ void Animation::addSpriteFromImage(std::string imageName, float frameTime, int n
 
     sprite->frameTime = frameTime;
 
-    sprite->numberOfParts = numberOfParts;
+    sprite->numberOfParts = numberOfParts;  
+    sprite->firstPart = firstPart;
+    if (lastPart != 0)
+    {
+        sprite->lastPart = lastPart;
+    }
+
+    else
+    {
+        sprite->lastPart = numberOfParts;
+    }
+
+    sprite->position.y = sprite->image.getSize().y * firstPart / numberOfParts;
 
     sprite->size = sf::Vector2i(sprite->image.getSize().x, sprite->image.getSize().y / numberOfParts);
     sprite->rectangle = sf::IntRect(sprite->position, sprite->size);
@@ -38,8 +50,29 @@ void Animation::addSpriteFromImage(std::string imageName, float frameTime, int n
     }
 }
 
+void Animation::removeSprite(std::string imageName)
+{
+    if (!sprites.count(imageName))
+    {
+        return;
+    }
+
+    if (parent->getComponent<Renderer>()->sprite == sprites[imageName])
+    {
+        return;
+    }
+
+    delete sprites[imageName];
+    sprites.erase(imageName);
+}
+
 void Animation::changeRendererSprite(std::string imageName)
 {
+    if (!sprites.count(imageName))
+    {
+        return;
+    }
+    
     if (currentSpriteName != imageName)
     {
         currentSprite = sprites[imageName];
@@ -64,16 +97,16 @@ void Animation::update()
     if (parent->controller->timeManager.getTime() % currentSprite->frameTime == 0)
     {
 
-        if (currentSprite->position.y >= currentSprite->image.getSize().y * (currentSprite->numberOfParts - 1) / currentSprite->numberOfParts)
+        if (currentSprite->position.y >= currentSprite->image.getSize().y * (currentSprite->lastPart - 1) / currentSprite->numberOfParts)
         {
-            currentSprite->position.y = 0;
+            currentSprite->position.y = currentSprite->firstPart * currentSprite->image.getSize().y / currentSprite->numberOfParts;
         }
 
         else
         {
             currentSprite->position.y += currentSprite->image.getSize().y / currentSprite->numberOfParts;
         }
-        
+
         currentSprite->sprite.setPosition(parent->x, 
         parent->y + currentSprite->image.getSize().y * (1 - 1 / currentSprite->numberOfParts) / 2);
 

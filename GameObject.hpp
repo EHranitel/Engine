@@ -61,6 +61,11 @@ void GameObject::addComponent()
         controller->animationManager.addAnimation(this);
     }
 
+    if(typeid(T).name() == typeid(Physics).name())
+    {
+        controller->physicsManager.addPhisics(this);
+    }
+
     if(std::is_base_of<Script, T>::value)
     {
         controller->scriptManager.addScript(newComponent);
@@ -91,6 +96,13 @@ void GameObject::removeComponent()
         delete components[typeid(T).name()];
 
         controller->animationManager.removeAnimation(this);
+    }
+
+    if (typeid(T).name() == typeid(Physics).name())
+    {
+        delete components[typeid(T).name()];
+
+        controller->physicsManager.removePhysics(this);
     }
 
     if(std::is_base_of<Script, T>::value)

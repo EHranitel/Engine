@@ -4,6 +4,7 @@ GameObject::~GameObject()
 {
     controller->animationManager.removeAnimation(this);
     controller->renderManager.removeRenderer(this);
+    controller->physicsManager.removePhysics(this);
     controller->scriptManager.removeAllScriptsFromOneGameObject(this);
 
     int len = components.size();

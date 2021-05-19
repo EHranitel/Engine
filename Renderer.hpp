@@ -21,8 +21,15 @@ class Sprite
 
         int frameTime = 1000;
 
-        int start = 0;
-        int finish = numberOfParts;
+        int firstPart = 0;
+        int lastPart = numberOfParts;
+};
+
+class Text
+{
+    public:
+        sf::Font font;
+        sf::Text text;
 };
 
 class Renderer : public Component
@@ -30,16 +37,22 @@ class Renderer : public Component
     private:
 
     public:
-
         bool isAnimated = false;
 
         Sprite* sprite;
+        Text* text;
 
         Renderer();
 
         void rotate(float degree);
         void flipVertically();
         void flipHorizontally();
+
+        sf::Vector2i getSize();
+
+        void changeFont(std::string fontName, sf::Color color = sf::Color::Red);
+
+        void changeText(sf::String message, int characterSize = 25);
 
         void changeImage(std::string imageName);
 
@@ -58,11 +71,17 @@ class RenderManager
     public:
         sf::RenderWindow* window;
 
+        RenderManager();
+
+        void setWindowSize(int x, int y);
+
         void update();
 
         void addRenderer(GameObject* rendererParent);
 
         void removeRenderer(GameObject* rendererParent);
+
+        ~RenderManager();
 };
 
 #endif
