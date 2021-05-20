@@ -4,8 +4,6 @@ GameObject* Storage::getObject(std::string key)
 {  
     if (!gameObjects.count(key))
     {
-        std::cout << "GAME OBJECT NOT FOUND" << std::endl;
-
         return nullptr;
     }
 
@@ -15,6 +13,7 @@ GameObject* Storage::getObject(std::string key)
 void Storage::addObject(std::string key)
 {
     GameObject* newObject = new GameObject;
+    newObject->name = key;
 
     gameObjects[key] = newObject;
 }
@@ -23,8 +22,6 @@ void Storage::removeObject(std::string key)
 {
     if (!gameObjects.count(key))
     {
-        std::cout << "GAME OBJECT NOT FOUND" << std::endl;
-
         return;
     }
 

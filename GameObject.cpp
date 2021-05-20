@@ -13,8 +13,6 @@ GameObject::~GameObject()
 
     for (int i = 0; i < len; i++) 
     {
-        delete it->second;
-
         components.erase(it++);
     }
 }

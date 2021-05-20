@@ -7,5 +7,5 @@ int TimeManager::getTime()
 
 void TimeManager::update()
 {
-    time = (time + 1) % (2 ^ 64 - 1);
+    time = (time + 1) % (1000000 - 1);
 }

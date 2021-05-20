@@ -5,12 +5,15 @@
 #include <iostream>
 #include "Managers.hpp"
 
+class Storage;
+
 class GameObject 
 {
     private:
         std::map<std::string, Component*> components;
         
     public:
+        Storage* storage;
         std::string name;
         ManagerController* controller;
         
@@ -34,8 +37,6 @@ T* GameObject::getComponent()
 {
     if (!components.count(typeid(T).name()))
     {
-        std::cout << "COMPONENT NOT FOUND" << std::endl;
-
         return nullptr;
     }
 
@@ -79,8 +80,6 @@ void GameObject::removeComponent()
 { 
     if (!components.count(typeid(T).name()))
     {
-        std::cout << "COMPONENT NOT FOUND" << std::endl;
-
         return;
     }
 
